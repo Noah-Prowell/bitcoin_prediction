@@ -14,6 +14,7 @@ from statsmodels.tsa.statespace.sarimax import SARIMAX
 from sklearn.preprocessing import power_transform
 from datetime import datetime
 import statsmodels.api as sm
+import plotly.express as px
 
 @st.cache
 def read_in_data():
@@ -68,13 +69,13 @@ price_24 = get_price_24(price)
 
 price_model = ARIMA(price_24, order=(1, 1, 0)).fit()
 
-date = st.text_input(label='Input Date to Predict to(format YYYY-MM-DD')
-date = str(date)
+date_in = st.text_input(label='Input Date to Predict to(format YYYY-MM-DD')
+date_in = str(date_in)
 
 if st.button('Arima Prediciton'):
     fig, ax = plt.subplots(1, figsize=(14, 4))
     ax.plot(price_24['2017':].index, price_24['2017':])
-    fig = price_model.plot_predict('2020', f'{date}', 
+    fig = price_model.plot_predict('2020', f'{date_in}', 
                                     dynamic=True, ax=ax, plot_insample=False)
 
     ax.legend().get_texts()[1].set_text("95% Prediction Interval")
@@ -85,7 +86,8 @@ if st.button('Arima Prediciton'):
 
 
 
-fig2, ax2 = plt.subplots()
-ax2.plot(price_24)
-ax2.set_title("Current Price")
-st.pyplot(fig2)
+
+date = price_24.index
+fig3 = px.line(price_24, x=date, y=price_24['Close'])
+fig3.show()
+st.plotly_chart(fig3)
