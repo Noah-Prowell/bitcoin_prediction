@@ -18,7 +18,7 @@ import plotly.express as px
 
 @st.cache
 def read_in_data():
-    df = pd.read_csv('data/bitcoin_new_a.zip')
+    df = pd.read_csv('data/bitcoin_try.csv')
     df.dropna(thresh = 7, inplace = True)
     df['day_change'] = df['Open'] - df['Close']
     df['label'] = np.where(df['day_change'] > 0, 'up', 'down')
@@ -51,7 +51,7 @@ if st.button('Predict'):
 
 
 def load_arima_data():
-    df = pd.read_csv('data/bitcoin_new_a.zip')
+    df = pd.read_csv('data/bitcoin_try.csv')
     df = df.iloc[::1440]
     close = df.pop('Close')
     close_df = pd.DataFrame(close)
