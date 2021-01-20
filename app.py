@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt 
 from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
 from sklearn.model_selection import train_test_split, GridSearchCV
-from sklearn.metrics import mean_squared_error, max_error
+from sklearn.metrics import accuracy_score
 from sklearn.model_selection import RandomizedSearchCV
 import joblib
 import streamlit as st
@@ -17,20 +17,24 @@ def read_in_data():
     df['label'] = np.where(df['day_change'] > 0, 'up', 'down')
     df.set_index('Timestamp', inplace= True)
     df.drop(['Low', 'Volume_(BTC)', 'Volume_(Currency)', 'Weighted_Price', 'day_change', 'Close'], axis=1, inplace=True)
-    df = df[2000000:]
+    df = df[::1400]
     return df
-# df = read_in_data()
-model = joblib.load('first_rf.pkl')
+df = read_in_data()
+model = joblib.load('grid_rf.sav')
 
-st.text('Input the open and the current high to predict whether bitcoin will go up or down')
+st.write('''# Bitcoin Predictor''')
+st.write('''Input the open and the current high to predict whether bitcoin will go up or down''')
 open_p = st.number_input(label='Input Open Here')
 high = st.number_input(label='Input Current High Here')
 data = {'Open':[open_p], 'High':[high]}
 input_pred = pd.DataFrame(data)
 if st.button('Predict'):
     try: 
-        model.predict(input_pred)
+        st.write(model.predict(input_pred))
     except:
         'Type Error: Wrong Data'
-else:
-    st.write('Click me Boi')
+
+""" 
+Grab max from dataframe and have it auto input into the model.
+Add ARMIA model and graphs
+"""
