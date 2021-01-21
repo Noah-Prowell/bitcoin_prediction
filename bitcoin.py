@@ -10,7 +10,7 @@ import time
 
 
 def load_data():
-    df = pd.read_csv('data/bitcoin_new.zip')
+    df = pd.read_csv('data/bitcoin_try.csv')
     df.dropna(thresh = 7, inplace = True)
     df['day_change'] = df['Open'] - df['Close']
     df['label'] = np.where(df['day_change'] > 0, True, False)
@@ -40,8 +40,8 @@ def fit_grb(X_train, y_train):
     print(f'Time to Train {end} - {start}')
     return grid_grb
 
-grb_fit = fit_grb(X_train, y_train)
-grb_pred = grb_fit.predict(X_test)
+# grb_fit = fit_grb(X_train, y_train)
+# grb_pred = grb_fit.predict(X_test)
 
 # grb_rmse = mean_squared_error(y_test, grb_pred, squared=False)  
 # grb_max_er = max_error(y_test, grb_pred)
@@ -80,4 +80,4 @@ def fit_random_forest(X_train, y_train):
 # mse = accuracy_score(y_test, rf_pred)  
 # print(rf_fit.best_params_)
 # max_er = max_error(y_test, rf_pred)
-joblib.dump(grb_fit, 'grid_gb.sav')
+# joblib.dump(grb_fit, 'grid_gb.sav')
