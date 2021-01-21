@@ -26,14 +26,14 @@ def read_in_data():
     df.drop(['Low', 'Volume_(BTC)', 'Volume_(Currency)', 'Weighted_Price', 'day_change', 'Close'], axis=1, inplace=True)
     df = df[::1400]
     return df
-# df = read_in_data()
+df = read_in_data()
 model = joblib.load('grid_rf.sav')
 
 st.write('''# Bitcoin Predictor''')
 st.write('''Input the open to predict whether bitcoin will go up or down''')
 open_p = st.number_input(label='Input Open Here')
-# high = df.High.iloc[-1]
-high = st.number_input(label='Input Current High Here')
+high = df.High.iloc[-1]
+# high = st.number_input(label='Input Current High Here')
 data = {'Open':[open_p], 'High':[high]}
 input_pred = pd.DataFrame(data)
 if st.button('Predict'):
