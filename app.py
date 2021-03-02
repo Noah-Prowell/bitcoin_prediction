@@ -30,7 +30,7 @@ df = read_in_data()
 model = joblib.load('grid_rf.sav')
 
 st.write('''# Bitcoin Predictor''')
-st.write('''Input the open to predict whether bitcoin will go up or down''')
+st.write('''Input the opening price to predict whether bitcoin will go up or down over the next 24 hours''')
 open_p = st.number_input(label='Input Open Here')
 high = df.High.iloc[-1]
 # high = st.number_input(label='Input Current High Here')
@@ -73,7 +73,7 @@ price_model = ARIMA(price_24, order=(1, 1, 0)).fit()
 date_in = st.text_input(label='Input Date to Predict to(format YYYY-MM-DD')
 date_in = str(date_in)
 
-if st.button('Arima Prediciton'):
+if st.button('Arima Prediction'):
     fig, ax = plt.subplots(1, figsize=(14, 4))
     ax.plot(price_24['2017':].index, price_24['2017':])
     fig = price_model.plot_predict('2020', f'{date_in}', 
