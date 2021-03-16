@@ -17,16 +17,14 @@ import statsmodels.api as sm
 import plotly.express as px
 
 @st.cache
-def transform_df(file_name):
-    df = pd.read_json(file_name)
-    df.drop('disclaimer', axis = 1, inplace = True)
-    df.drop('time', axis = 1, inplace = True)
-    df.drop(['updated', 'updatedISO'], inplace = True)
-    diff = df.diff().rename(columns = {'bpi': 'Diff'}).Diff.values
-    df['diff'] = diff
-    df.fillna(0, inplace = True)
-    df['label'] = np.where(df['diff'] > 0, True, False)
-    df.drop('diff', axis = 1, inplace= True)
+def read_in_data():
+    df = pd.read_csv('data/bitcoin_try.csv')
+    df.dropna(thresh = 7, inplace = True)
+    df['day_change'] = df['Open'] - df['Close']
+    df['label'] = np.where(df['day_change'] > 0, 'up', 'down')
+    df.set_index('Timestamp', inplace= True)
+    df.drop(['Low', 'Volume_(BTC)', 'Volume_(Currency)', 'Weighted_Price', 'day_change', 'Close'], axis=1, inplace=True)
+    df = df[::1400]
     return df
 df = read_in_data()
 model = joblib.load('grid_rf.sav')
