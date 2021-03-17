@@ -31,12 +31,12 @@ def fit_grb(X_train, y_train):
     print(f'Time to Train {end} - {start}')
     return grid_grb
 
-# grb_fit = fit_grb(X_train, y_train)
-# grb_pred = grb_fit.predict(X_test)
+grb_fit = fit_grb(X_train, y_train)
+grb_pred = grb_fit.predict(X_test)
 
-# grb_rmse = mean_squared_error(y_test, grb_pred, squared=False)  
+grb_rmse = accuracy_score(y_test, grb_pred)   
 # grb_max_er = max_error(y_test, grb_pred)
-# print(f'mse: {grb_rmse}, max_error: {grb_max_er}')
+print(f'mse: {grb_rmse}')
 
 def fit_random_forest(X_train, y_train):
     rf = RandomForestClassifier(n_jobs = -1)
@@ -45,12 +45,12 @@ def fit_random_forest(X_train, y_train):
     # Number of features to consider at every split
     max_features = ['auto', 'sqrt']
     # Maximum number of levels in tree
-    max_depth = [int(x) for x in np.linspace(5, 80, num = 15)]
+    max_depth = [int(x) for x in np.linspace(2, 80, num = 15)]
     max_depth.append(None)
     # Minimum number of samples required to split a node
-    min_samples_split = [5, 10, 15]
+    min_samples_split = [10, 15, 17]
     # Minimum number of samples required at each leaf node
-    min_samples_leaf = [1, 2]
+    min_samples_leaf = [1, 2, 3]
     # Method of selecting samples for training each tree
     bootstrap = [True, False]
     # Create the random grid
@@ -69,10 +69,10 @@ def fit_random_forest(X_train, y_train):
     print(f'Time to Train {end} - {start}')
     return rf_random
 
-rf_fit = fit_random_forest(X_train, y_train)
-rf_pred = rf_fit.predict(X_test)
-mse = accuracy_score(y_test, rf_pred)  
-print(rf_fit.best_params_)
-print(f'The mse is {mse}')
+# rf_fit = fit_random_forest(X_train, y_train)
+# rf_pred = rf_fit.predict(X_test)
+# mse = accuracy_score(y_test, rf_pred)  
+# print(rf_fit.best_params_)
+# print(f'The mse is {mse}')
 # max_er = max_error(y_test, rf_pred)
 # joblib.dump(grb_fit, 'grid_gb.sav')
