@@ -60,7 +60,9 @@ def upload_file(file_name, bucket, object_name=None):
 while True:
     sleep(86400 - time() % 86400)
     run_api()
+    print('api was sucessful')
     upload_file('full_data.json', 'noah-bitcoin', 'full_data.json')
+    print('saving file was sucessfull')
 
 
 
