@@ -20,7 +20,7 @@ def build_model_and_ttt(data):
 
 def fit_grb(X_train, y_train):
     grb_model = GradientBoostingClassifier(subsample = .25)
-    params_grb = {'learning_rate': [.001, .0001, .005], 'n_estimators':[1500, 1700, 1850], 'max_depth': [6, 7, 8]}
+    params_grb = {'learning_rate': [.003,.008,.01], 'n_estimators':[1200, 1500, 1700], 'max_depth': [7,8,9]}
     grid_grb = GridSearchCV(grb_model, params_grb)
     print('fitting grb model')
     start = time.time()
@@ -58,7 +58,8 @@ def fit_random_forest(X_train, y_train):
     start = time.time()
     rf_random.fit(X_train, y_train)
     end = time.time()
-    print(f'Time to Train {end} - {start}')
+    tme = end - start
+    print(f'Time to Train {tme}')
     return rf_random
 
 
@@ -81,4 +82,5 @@ if __name__ == '__main__':
     grb_rmse = accuracy_score(y_test, grb_pred)   
     # grb_max_er = max_error(y_test, grb_pred)
     print(f'mse: {grb_rmse}')
+    print(grb_fit.best_params_)
     joblib.dump(grb_fit, 'grid_grb.sav')
