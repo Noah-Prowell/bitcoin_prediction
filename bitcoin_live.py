@@ -42,7 +42,6 @@ def run_api():
 # In[4]:
 
 
-run_api()
 
 
 # In[11]:
