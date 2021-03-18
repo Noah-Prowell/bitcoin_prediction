@@ -18,13 +18,13 @@ import plotly.express as px
 
 @st.cache
 def read_in_data():
-    df = pd.read_csv('data/bitcoin_try.csv')
-    df.dropna(thresh = 7, inplace = True)
-    df['day_change'] = df['Open'] - df['Close']
-    df['label'] = np.where(df['day_change'] > 0, 'up', 'down')
-    df.set_index('Timestamp', inplace= True)
-    df.drop(['Low', 'Volume_(BTC)', 'Volume_(Currency)', 'Weighted_Price', 'day_change', 'Close'], axis=1, inplace=True)
-    df = df[::1400]
+    df = pd.read_json('full_data.json')
+    # df.dropna(thresh = 7, inplace = True)
+    # df['day_change'] = df['Open'] - df['Close']
+    # df['label'] = np.where(df['day_change'] > 0, 'up', 'down')
+    # df.set_index('Timestamp', inplace= True)
+    # df.drop(['Low', 'Volume_(BTC)', 'Volume_(Currency)', 'Weighted_Price', 'day_change', 'Close'], axis=1, inplace=True)
+    # df = df[::1400]
     return df
 df = read_in_data()
 model = joblib.load('grid_rf.sav')
@@ -32,9 +32,8 @@ model = joblib.load('grid_rf.sav')
 st.write('''# Bitcoin Predictor''')
 st.write('''Input the opening price to predict whether bitcoin will go up or down over the next 24 hours''')
 open_p = st.number_input(label='Input Open Here')
-high = df.High.iloc[-1]
-# high = st.number_input(label='Input Current High Here')
-data = {'Open':[open_p], 'High':[high]}
+
+data = {'Open':[open_p]}
 input_pred = pd.DataFrame(data)
 if st.button('Predict'):
     try: 
@@ -88,7 +87,7 @@ if st.button('Arima Prediction'):
 
 
 
-date = price_24.index
-fig3 = px.line(price_24, x=date, y=price_24['Close'])
+date = df.index
+fig3 = px.line(df.bpi.values, x=date, y=df.bpi)
 fig3.show()
 st.plotly_chart(fig3)

@@ -9,16 +9,14 @@ import joblib
 import time
 
 
-df = pd.read_json('full_data.json')
-y_1 = df.pop('label')
-X_1 = df
+
 
 def build_model_and_ttt(data):
     X, X_h, y, y_h = train_test_split(X_1, y_1, test_size = .1)
     X_train, X_test, y_train, y_test = train_test_split(X,y)
     return X_train, X_test, y_train, y_test, X_h, y_h
 
-X_train, X_test, y_train, y_test, X_h, y_h = build_model_and_ttt(df)
+
 
 def fit_grb(X_train, y_train):
     grb_model = GradientBoostingClassifier(subsample = .25)
@@ -31,12 +29,6 @@ def fit_grb(X_train, y_train):
     print(f'Time to Train {end} - {start}')
     return grid_grb
 
-grb_fit = fit_grb(X_train, y_train)
-grb_pred = grb_fit.predict(X_test)
-
-grb_rmse = accuracy_score(y_test, grb_pred)   
-# grb_max_er = max_error(y_test, grb_pred)
-print(f'mse: {grb_rmse}')
 
 def fit_random_forest(X_train, y_train):
     rf = RandomForestClassifier(n_jobs = -1)
@@ -69,10 +61,24 @@ def fit_random_forest(X_train, y_train):
     print(f'Time to Train {end} - {start}')
     return rf_random
 
-# rf_fit = fit_random_forest(X_train, y_train)
-# rf_pred = rf_fit.predict(X_test)
-# mse = accuracy_score(y_test, rf_pred)  
-# print(rf_fit.best_params_)
-# print(f'The mse is {mse}')
-# max_er = max_error(y_test, rf_pred)
-# joblib.dump(grb_fit, 'grid_gb.sav')
+
+if __name__ == '__main__':
+    df = pd.read_json('full_data.json')
+    y_1 = df.pop('label')
+    X_1 = df
+    X_train, X_test, y_train, y_test, X_h, y_h = build_model_and_ttt(df)
+    # rf_fit = fit_random_forest(X_train, y_train)
+    # rf_pred = rf_fit.predict(X_test)
+    # mse = accuracy_score(y_test, rf_pred)  
+    # print(rf_fit.best_params_)
+    # print(f'The mse is {mse}')
+    # max_er = max_error(y_test, rf_pred)
+
+
+    grb_fit = fit_grb(X_train, y_train)
+    grb_pred = grb_fit.predict(X_test)
+
+    grb_rmse = accuracy_score(y_test, grb_pred)   
+    # grb_max_er = max_error(y_test, grb_pred)
+    print(f'mse: {grb_rmse}')
+    joblib.dump(grb_fit, 'grid_grb.sav')
