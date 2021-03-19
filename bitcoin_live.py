@@ -4,7 +4,7 @@
 # In[16]:
 
 
-# import requests
+import requests
 import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta
@@ -49,12 +49,13 @@ def run_api():
 
 # In[ ]:
 def upload_file(file_name, bucket, object_name=None):
-    # s3_client = boto3.client('s3')
-    cli = boto3.client('s3')
-    cli.put_object(
-    Body=file_name,
-    Bucket=bucket,
-    Key=object_name)
+    s3_client = boto3.client('s3')
+    try:
+        response = s3_client.upload_file(file_name, bucket, object_name)
+    except ClientError as e:
+        logging.error(e)
+        return False
+    return True
 
 while True:
     sleep(86400 - time() % 86400)
